@@ -1,0 +1,17 @@
+{
+  "name": "island",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:dev": "nodemon --inspect-brk",
+    "startprod": "node app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "koa": "^2.11.0",
+    "koa-router": "^7.4.0"
+  }
+}
