@@ -2,7 +2,7 @@
   "name": "island",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "start:dev": "nodemon --inspect-brk",
     "startprod": "node app.js"

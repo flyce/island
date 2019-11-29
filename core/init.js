@@ -6,7 +6,8 @@ class InitManager {
         // 入口方法
         InitManager.app = app
         InitManager.initLoadRouters(app)
-        InitManager.loadHttpExecption() // 全局导入异常处理类
+        // InitManager.loadHttpExecption() // 全局导入异常处理类
+        InitManager.loadConfig()
     }
 
     static initLoadRouters() {
@@ -21,11 +22,16 @@ class InitManager {
         }
     }
 
-    // 全局导入异常处理类 not recommend
-    static loadHttpExecption() {
-        const errors = require('./httpException')
-        global.errs = errors
+    static loadConfig() {
+        const config = require('../config/env')
+        global.config = config
     }
+
+    // 全局导入异常处理类 not recommend
+    // static loadHttpExecption() {
+    //     const errors = require('./http-exception')
+    //     global.errs = errors
+    // }
 }
 
 module.exports = InitManager;

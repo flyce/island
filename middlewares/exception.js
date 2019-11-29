@@ -1,4 +1,4 @@
-const { HttpException } = require('../core/httpException')
+const { HttpException } = require('../core/http-exception')
 const catchError = async (ctx, next) => {
     try {
         await next()
@@ -11,6 +11,9 @@ const catchError = async (ctx, next) => {
             }
             ctx.status = error.code
         } else {
+            if(global.config.environment === 'dev') {
+                throw error
+            }
             ctx.body = {
                 msg: 'we made a mistake.',
                 errorCode: 0,
