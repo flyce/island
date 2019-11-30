@@ -1,4 +1,5 @@
 const { Validator, Rule } = require('../../core/validator')
+const { User } = require('../models/user')
 
 class PositiveIntegerValidator extends Validator {
     constructor() {
@@ -8,8 +9,52 @@ class PositiveIntegerValidator extends Validator {
         new Rule('isInt', '需要是正整数', { min: 1 })
       ]
     }
-  }
+}
+
+class RegisterValidator extends Validator {
+    constructor() {
+        super()
+        this.email = [
+            new Rule('isEmail', '不符合Email地址规范', )
+        ]
+        this.password = [
+            new Rule('isLength', '密码至少6个字符，最多32个字符', {
+                min: 6,
+                max: 32
+            }),
+            new Rule('matches', '密码不符合规范', '^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]')
+        ]
+        this.nickname = [
+            new Rule('isLength', '昵称长度为4-32', {
+                min: 4,
+                max: 16
+            })
+        ]
+    }
+
+    validatePassword(vals) {
+        const { password, repeatPassword } = vals.body
+        if(password != repeatPassword) {
+            // 直接抛出Error 由 core/validator 处理
+            throw new Error('两个密码必须相同')
+        }
+    }
+
+    async validateEmail(vals) {
+        const { email } = vals.body
+        const user = await User.findOne({
+            where: {
+                email
+            }
+        })
+
+        if(user) {
+            throw new Error('email 已存在')
+        }
+    }
+}
 
 module.exports = {
-    PositiveIntegerValidator
+    PositiveIntegerValidator,
+    RegisterValidator
 }

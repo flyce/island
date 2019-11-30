@@ -6,10 +6,11 @@ class InitManager {
         // 入口方法
         InitManager.app = app
         InitManager.initLoadRouters(app)
-        // InitManager.loadHttpExecption() // 全局导入异常处理类
+        InitManager.loadHttpExecption() // 全局导入异常处理类
         InitManager.loadConfig()
     }
 
+    // 导入的路由必须以moudle.exports = router的形式导出
     static initLoadRouters() {
         const apiDirectory = `${process.cwd()}/app/api`
 
@@ -28,10 +29,10 @@ class InitManager {
     }
 
     // 全局导入异常处理类 not recommend
-    // static loadHttpExecption() {
-    //     const errors = require('./http-exception')
-    //     global.errs = errors
-    // }
+    static loadHttpExecption() {
+        const errors = require('./http-exception')
+        global.errs = errors
+    }
 }
 
 module.exports = InitManager;
