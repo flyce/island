@@ -77,7 +77,7 @@ class TokenValidator extends Validator {
         if(!val.body.type) {
             throw new Error('type 是必须参数')
         }
-        console.log(LoginType.isThisType(val.body.type))
+        
         if(!LoginType.isThisType(val.body.type)) {
             throw new Error('type 参数不合法')
         }
