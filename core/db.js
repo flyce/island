@@ -10,7 +10,9 @@ const sequelize = new Sequelize(dbName, user, password, {
     define: {}
 })
 
-sequelize.sync()
+sequelize.sync({
+    force: false
+})
 
 module.exports = {
     sequelize

@@ -1,5 +1,6 @@
 const { Validator, Rule } = require('../../core/validator')
 const { User } = require('../models/user')
+const { LoginType } = require('../lib/enum')
 
 class PositiveIntegerValidator extends Validator {
     constructor() {
@@ -54,7 +55,37 @@ class RegisterValidator extends Validator {
     }
 }
 
+class TokenValidator extends Validator {
+    constructor() {
+        super()
+        this.account = [
+            new Rule('isLength', '不符合账号规则', {
+                min: 4,
+                max: 32
+            })
+        ]
+        this.secret = [
+            new Rule('isOptional'),
+            new Rule('isLength', '至少六个字符', {
+                mix: 6,
+                max: 128
+            })
+        ]
+    }
+
+    validateLoginType(val) {
+        if(!val.body.type) {
+            throw new Error('type 是必须参数')
+        }
+        console.log(LoginType.isThisType(val.body.type))
+        if(!LoginType.isThisType(val.body.type)) {
+            throw new Error('type 参数不合法')
+        }
+    }
+}
+
 module.exports = {
     PositiveIntegerValidator,
-    RegisterValidator
+    RegisterValidator,
+    TokenValidator
 }
