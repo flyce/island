@@ -5,12 +5,18 @@ const { LoginType } = require('../../lib/enum')
 const { User } = require('../../models/user')
 const { generateToken } = require('../../../core/util')
 const { Auth } = require('../../../middlewares/auth')
+const { WXManager } = require('../../services/wx')
 
 const router = new Router({
     prefix: '/v1/token'
 })
 
 router.post('/', async (ctx) => {
+    // 业务逻辑
+    // 1. 在API接口编写
+    // 2. Model 分层
+
+    // 业务分成 Model Service
     const v = await new TokenValidator().validate(ctx)
     let token
 
@@ -18,7 +24,9 @@ router.post('/', async (ctx) => {
         case LoginType.USER_EMAIL: 
             token = await emailLogin(v.get('body.account'), v.get('body.secret'))
             break
-        case LoginType.USER_MINI_PROGRAM: break
+        case LoginType.USER_MINI_PROGRAM: 
+            token = await WXManager.codeToToken(v.get('body.account'))
+            break
         default: 
             throw new global.errs.ParameterException('没有相应的处理函数')
     }
