@@ -15,8 +15,9 @@ class WXManager {
             throw new global.errs.AuthFailed('openid 获取失败')
         }
         const errcode = result.data.errcode
-        if(errcode !== 0) {
-            throw new global.errs.AuthFailed('openid 获取失败' + errcode)
+        const errMsg = result.data.errMsg
+        if(errcode) {
+            throw new global.errs.AuthFailed('openid 获取失败' + errMsg)
         }
 
         let user = await User.getUserByOpenId(result.data.openid)
