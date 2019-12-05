@@ -1,5 +1,6 @@
 const { HttpException } = require('../core/http-exception')
 const catchError = async (ctx, next) => {
+    console.log(`${ctx.method} ${ctx.path}`)
     try {
         await next()
     } catch (error) {

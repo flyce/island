@@ -17,7 +17,7 @@ class Movie extends Model {
 
 Movie.init(classicField, {
     sequelize,
-    tableName: 'movie'
+    tableName: 'movies'
 })
 
 class Music extends Model {
@@ -28,16 +28,16 @@ const musicField = Object.assign({url: Sequelize.STRING}, classicField)
 
 Music.init(musicField, {
     sequelize,
-    tableName: 'music'
+    tableName: 'musics'
 })
 
-class Sentence extends {
+class Sentence extends Model {
 
 }
 
 Sentence.init(classicField, {
     sequelize,
-    tableName: 'sentence'
+    tableName: 'sentences'
 })
 
 module.exports = {

@@ -12,7 +12,7 @@ Flow.init({
     type: Sequelize.INTEGER
 }, {
     sequelize,
-    tableName: 'flow'
+    tableName: 'flows'
 })
 
 module.exports = { Flow }
