@@ -66,7 +66,7 @@ User.init({
     }
 }, {
     sequelize,
-    tableName: 'users'
+    tableName: 'user'
 })
 
 module.exports = { User }
