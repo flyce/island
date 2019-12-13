@@ -7,7 +7,18 @@ const sequelize = new Sequelize(dbName, user, password, {
     port,
     logging: console.log,
     timezone: '+08:00',
-    define: {}
+    define: {
+        timestamps: true,
+        // paranoid: true,
+        freezeTableName: true,
+        scopes: {
+            bh: {
+                attributes: {
+                    exclude: ['updatedAt', 'createdAt']
+                }
+            }
+        }
+    }
 })
 
 sequelize.sync({

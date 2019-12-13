@@ -1,6 +1,6 @@
 const { Validator, Rule } = require('../../core/validator')
 const { User } = require('../models/user')
-const { LoginType } = require('../lib/enum')
+const { LoginType, ArtType } = require('../lib/enum')
 
 class PositiveIntegerValidator extends Validator {
     constructor() {
@@ -95,12 +95,41 @@ class NotEmptyValidator extends Validator {
     } 
 }
 
-function checkType(val) {
-    if(!val.body.type) {
+class Checker {
+    constructor(type) {
+        this.enumType = type
+    }
+
+    checkType(val) {
+        let type = val.body.type || val.path.type
+        if(!type) {
+            throw new Error('type 是必须参数')
+        }
+        type = parseInt(type)
+        if(!this.enumType.isThisType(type)) {
+            throw new Error('type 参数不合法')
+        }
+    }
+}
+
+function checkLoginType(val) {
+    let type = val.body.type || val.path.type
+    if(!type) {
         throw new Error('type 是必须参数')
     }
-    
-    if(!LoginType.isThisType(val.body.type)) {
+    type = parseInt(type)
+    if(!LoginType.isThisType(type)) {
+        throw new Error('type 参数不合法')
+    }
+}
+
+function checkArtType(val) {
+    let type = val.body.type || val.path.type
+    if(!type) {
+        throw new Error('type 是必须参数')
+    }
+    type = parseInt(type)
+    if(!ArtType.isThisType(type)) {
         throw new Error('type 参数不合法')
     }
 }
@@ -108,8 +137,18 @@ function checkType(val) {
 class LikeValidator extends PositiveIntegerValidator {
     constructor() {
         super()
-        this.validateType = checkType
+        // 方案1
+        // 实例化 Checker 调用 checkType 方法，并将实例化的 checker 的 this 绑定到 Checker 类上
+        // const checker = new Checker(ArtType)
+        // this.validateType = checker.checkType.bind(checker)
+
+        // 方案2
+        this.validateType = checkArtType
     }
+}
+
+class ClassicValidator extends LikeValidator {
+
 }
 
 module.exports = {
@@ -117,5 +156,6 @@ module.exports = {
     RegisterValidator,
     TokenValidator,
     NotEmptyValidator,
-    LikeValidator
+    LikeValidator,
+    ClassicValidator
 }

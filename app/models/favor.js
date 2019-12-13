@@ -1,4 +1,4 @@
-const { Sequelize, Model } = require('sequelize')
+const { Sequelize, Model, Op } = require('sequelize')
 
 const { sequelize } = require('../../core/db')
 const { Art } = require('../models/art')
@@ -22,7 +22,7 @@ class Favor extends Model {
                 uid
             }, {transaction: t})
 
-            const art = await Art.getData(artId, type)
+            const art = await Art.getData(artId, type, false)
             await art.increment('favNums', {by: 1, transaction: t})
         })
     }
@@ -43,9 +43,36 @@ class Favor extends Model {
               transaction: t
             })
 
-            const art = await Art.getData(artId, type)
+            const art = await Art.getData(artId, type, false)
             await art.decrement('favNums', {by: 1, transaction: t})
         })
+    }
+
+    static async userLikeIt(artId, type, uid) {
+        const favor = await Favor.findOne({
+           where: {
+            artId,
+            type,
+            uid
+           }
+        })
+        return favor ? true : false
+    }
+
+    static async getMyClassicFavors(uid) {
+        const arts = await Favor.findAll({
+            where: {
+                uid,
+                type: {
+                    [Op.not]: 400 // 不等于 400
+                }
+            }
+        })
+        if(!arts) {
+            throw new global.errs.NotFound()
+        }
+        // 防止循环查询数据库 查询数据库次数不可控 受前端控制
+        return await Art.getList(arts)
     }
 
 }
