@@ -4,6 +4,25 @@ const { flatten } = require('lodash')
 const { Movie, Music, Sentence } = require('./classic')
 
 class Art {
+    constructor(artId, type) {
+        this.artId = artId
+        this.type = type
+    }
+
+    async getDetail(uid) {
+        const art = await Art.getData(this.artId, this.type)
+        if(!art) {
+            throw new global.errs.NotFound()
+        }
+        const { Favor } = require('./favor')
+        const like = await Favor.userLikeIt(this.artId, this.type, uid)
+
+        return {
+            art,
+            likeStatus: like
+        }
+    }
+
     static async getList(artInfoList) {
         // artInfoList 有三种类型ART 3次in查询从身体
         const artInfoObj = {
